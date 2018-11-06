@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Mini-Arcade</string>
+    <string name="connectButton">Connect</string>
 </resources>
