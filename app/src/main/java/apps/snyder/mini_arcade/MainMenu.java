@@ -2,7 +2,10 @@ package apps.snyder.mini_arcade;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +15,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
 public class MainMenu extends AppCompatActivity {
     private ListView deviceList;
+    ArrayList<String> foundDevices = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +52,25 @@ public class MainMenu extends AppCompatActivity {
             }
             else {
                 //here, we present list of devices to choose from
-                //Toast.makeText(this, "We can do stuff now!", Toast.LENGTH_SHORT).show();
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                registerReceiver(receiver, filter);
+                if (bluetooth.isDiscovering()) {
+                    bluetooth.cancelDiscovery();
+                }
+                bluetooth.startDiscovery();
                 showDevices(devices);
+                bluetooth.cancelDiscovery();
             }
         }
     }
 
     private void showDevices(Set<BluetoothDevice> devices){
+        //add paired devices first
         ArrayList<String> list = new ArrayList<>();
         for(BluetoothDevice b : devices) {
             list.add(b.getName() + "\n" + b.getAddress());
         }
+        list.addAll(foundDevices);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         deviceList.setAdapter(adapter);
@@ -67,13 +80,23 @@ public class MainMenu extends AppCompatActivity {
                 String info = ((TextView) view).getText().toString();
                 String address = info.substring(info.length()-17);
 
-                Toast.makeText(MainMenu.this, info, Toast.LENGTH_SHORT).show();
-
                 //send info to game activity
-                //Intent intent = new Intent(MainMenu.this, GamePage.class);
-                //intent.putExtra(EXTRA_ADDRESS, address);
-                //startActivity(intent);
+                Intent intent = new Intent(MainMenu.this, GamePage.class);
+                intent.putExtra("address", address);
+                startActivity(intent);
             }
         });
     }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //device found
+                BluetoothDevice d = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                foundDevices.add(d.getName() + "\n" + d.getAddress());
+            }
+        }
+    };
 }

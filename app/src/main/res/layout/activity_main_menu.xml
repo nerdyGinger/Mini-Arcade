@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/technologyBackground"
-    tools:context=".MainMenu">
+    android:background="@drawable/technology_background"
+    tools:context=".MainMenu"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/mainText"
@@ -16,6 +17,10 @@
         android:padding="10dp"
         android:text="@string/mainMenuText"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="@android:color/background_light"
+        android:shadowColor="@android:color/background_dark"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
         android:textStyle="bold" />
 
     <Button
@@ -31,9 +36,12 @@
         android:id="@+id/deviceList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/connectButton">
+        android:layout_below="@+id/connectButton"
+        android:layout_centerVertical="true"
+        android:background="#96ffffff"
+        android:cacheColorHint="@android:color/transparent"
+        android:layout_margin="10dp">
 
     </ListView>
 
