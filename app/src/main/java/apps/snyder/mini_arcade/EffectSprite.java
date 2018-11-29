@@ -12,7 +12,7 @@ public class EffectSprite {
     private int life = 4;
     private List<EffectSprite> sprites;
 
-    public EffectSprite(List<EffectSprite> effects, GamePage.GameView view, float x, float y, Bitmap bmp) {
+    public EffectSprite(List<EffectSprite> effects, GameView view, float x, float y, Bitmap bmp) {
         this.x = Math.min(Math.max(x - bmp.getWidth() / 2, 0),
                 view.getWidth() - bmp.getWidth());
         this.y = Math.min(Math.max(y - bmp.getHeight() / 2, 0),

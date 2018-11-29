@@ -31,13 +31,17 @@ public class MainMenu extends AppCompatActivity {
         deviceList = findViewById(R.id.deviceList);
     }
 
+    public void testSprite(View view) {
+        Intent test = new Intent(MainMenu.this, SpriteTest.class);
+        startActivity(test);
+    }
+
     public void connect(View view) {
         BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if (bluetooth == null) {
             //check for bluetooth availability
             Toast.makeText(this, "Bluetooth not available", Toast.LENGTH_SHORT).show();
-            finish();
         }
         else if (!bluetooth.isEnabled()) {
             //check if bluetooth is enabled; send request if not

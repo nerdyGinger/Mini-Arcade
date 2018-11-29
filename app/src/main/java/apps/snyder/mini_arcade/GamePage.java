@@ -11,12 +11,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -42,21 +44,24 @@ public class GamePage extends AppCompatActivity {
     InputStream mInputStream;
     int readBufferPosition;
     boolean stop;
-    Integer xValue = 0;
-    Integer yValue = 0;
+    Integer xValue = 512;
+    Integer yValue = 503;
     Integer buttonValue;
+    private GameView gameView;
     //static final UUID myUuid = UUID.fromString("ce1cd918-e6ed-11e8-9f32-f2801f1b9fd1"); //generated uuid
     private static final UUID myUuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //base uuid
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new GameView(this));
+        gameView = new GameView(this);
+        setContentView(gameView);
 
         Intent inIntent = getIntent();
         address = inIntent.getStringExtra("address");
 
         new Connect().execute();
+        dataListener();
     }
 
 
@@ -89,6 +94,7 @@ public class GamePage extends AppCompatActivity {
                                     xValue = Integer.parseInt(values[0]);
                                     yValue = Integer.parseInt(values[1]);
                                     buttonValue = Integer.parseInt(values[2]);
+                                    gameView.setXY(xValue, yValue);
 
                                 } else {
                                     readBuffer[readBufferPosition++] = b;
@@ -156,108 +162,6 @@ public class GamePage extends AppCompatActivity {
             }
             progress.dismiss();
         }
-    }
-
-
-
-    //---> Class for sprite drawing and real-time game animation/scoring
-    public class GameView extends SurfaceView {
-        private Bitmap bmp;
-        private SurfaceHolder holder;
-        private Sprite sprite;
-        private GameLoopThread loop;
-
-        public GameView(Context context) {
-            super(context);
-            loop = new GameLoopThread(this);
-            holder = getHolder();
-            holder.addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    loop.setRunning(true);
-                    loop.start();
-                }
-
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-                }
-
-                @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    boolean retry = true;
-                    loop.setRunning(false);
-                    while (retry) {
-                        try {
-                            loop.join();
-                            retry = false;
-                        } catch (InterruptedException ex) {
-                            Log.e("-----Important!----->", ex.toString());
-                        }
-                    }
-                }
-            });
-
-            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ranger_m);
-            sprite = new Sprite(this, bmp);
-        }
-
-        @Override
-        public void draw(Canvas canvas) {
-            super.draw(canvas);
-            canvas.drawColor(Color.BLACK);
-            sprite.onDraw(canvas, xValue, yValue);
-        }
-    }
-
-
-    //separate thread for game loop animation
-    public class GameLoopThread extends Thread {
-        static final long fps = 5;
-        private GameView view;
-        private boolean running = false;
-
-        public GameLoopThread(GameView view) {
-            this.view = view;
-        }
-
-        public void setRunning(boolean run) {
-            running = run;
-        }
-
-        @Override
-        public void run() {
-            long ticksPS = 1000 / fps;
-            long startTime;
-            long sleepTime;
-
-            while(running) {
-                dataListener();
-                Canvas c = null;
-                startTime = System.currentTimeMillis();
-                try {
-                    c = view.getHolder().lockCanvas();
-                    synchronized (view.getHolder()) {
-                        view.draw(c);
-                    }
-                } finally {
-                    if (c != null) {
-                        view.getHolder().unlockCanvasAndPost(c);
-                    }
-                }
-                sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
-                try {
-                    if (sleepTime > 0) {
-                        sleep(sleepTime);
-                    } else {
-                        sleep(10);
-                    }
-                } catch (Exception ex) {
-                    Log.e("----->Important!----->", ex.toString());
-                }
-            }
-        }
-
     }
 
 }

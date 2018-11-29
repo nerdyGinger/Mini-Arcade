@@ -32,6 +32,14 @@
         android:text="@string/connectButton"
         android:onClick="connect"/>
 
+    <Button
+        android:id="@+id/spriteTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mainText"
+        android:text="@string/spriteTestText"
+        android:onClick="testSprite"/>
+
     <ListView
         android:id="@+id/deviceList"
         android:layout_width="wrap_content"
