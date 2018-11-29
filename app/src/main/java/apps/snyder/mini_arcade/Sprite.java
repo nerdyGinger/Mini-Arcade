@@ -73,6 +73,10 @@ public class Sprite {
     private int getAnimationRow() {
         double dirDouble = (Math.atan2(xSpeed, ySpeed) / (Math.PI / 2) + 2);
         int direction = (int) Math.round(dirDouble) % bmpRows;
+        //buffer for non-motion
+        if (-20 < xSpeed && xSpeed < 20 && -20 < ySpeed && ySpeed < 20) {
+            return animationMap[2];
+        }
         return animationMap[direction];
     }
 }

@@ -61,7 +61,6 @@ public class GamePage extends AppCompatActivity {
         address = inIntent.getStringExtra("address");
 
         new Connect().execute();
-        dataListener();
     }
 
 
@@ -71,7 +70,6 @@ public class GamePage extends AppCompatActivity {
         stop = false;
         readBufferPosition = 0;
         final byte[] readBuffer = new byte[1024];
-
         Thread listenerThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -136,14 +134,15 @@ public class GamePage extends AppCompatActivity {
                 }
             } catch (Exception ex){
                 //try fallback connection
-                Log.e("----->Important!----->", ex.toString());
+                Log.e("-----Important!----->", "Trying fallback: " + ex.toString());
                 try {
                     btSocket = (BluetoothSocket) arduino.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(arduino,1);
+                    btSocket.connect();
                     mInputStream = btSocket.getInputStream();
                 } catch (Exception ex2) {
                     //connection failed
                     connectSuccess = false;
-                    Log.e("----->Important!----->", ex2.toString());
+                    Log.e("-----Important!----->", ex2.toString());
                 }
             }
             return null;
@@ -159,6 +158,8 @@ public class GamePage extends AppCompatActivity {
             } else {
                 Toast.makeText(GamePage.this, "Connected", Toast.LENGTH_SHORT).show();
                 connection = true;
+
+                dataListener();
             }
             progress.dismiss();
         }

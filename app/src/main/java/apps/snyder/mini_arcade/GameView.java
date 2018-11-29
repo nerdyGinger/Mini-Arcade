@@ -27,12 +27,12 @@ public class GameView extends SurfaceView {
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                //create sprite
+                bmp = BitmapFactory.decodeResource(getResources(), R.drawable.water_girl);
+                sprite = new Sprite(GameView.this, bmp);
+                //start loop
                 loop.setRunning(true);
                 loop.start();
-                bmp = BitmapFactory.decodeResource(getResources(), R.drawable.water_girl);
-
-                //create sprite
-                sprite = new Sprite(GameView.this, bmp);
             }
 
             @Override
@@ -60,7 +60,7 @@ public class GameView extends SurfaceView {
     public void setXY(int x, int y) {
         //sets x and y values with range (-512, 512)
         this.xValue = (x - 512);
-        this.yValue = -1 * (y - 512);
+        this.yValue = (y - 512);
     }
 
     @Override
