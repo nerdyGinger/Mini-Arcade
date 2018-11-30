@@ -11,14 +11,19 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //---> Class for sprite drawing and real-time game animation
 public class GameView extends SurfaceView {
     private Bitmap bmp;
+    private Bitmap eBmp;
     private SurfaceHolder holder;
     private Sprite sprite;
     private GameLoopThread loop;
     private int xValue;
     private int yValue;
+    private List<EffectSprite> eSprites = new ArrayList<>();
 
     public GameView(Context context) {
         super(context);
@@ -29,6 +34,7 @@ public class GameView extends SurfaceView {
             public void surfaceCreated(SurfaceHolder holder) {
                 //create sprite
                 bmp = BitmapFactory.decodeResource(getResources(), R.drawable.water_girl);
+                eBmp = BitmapFactory.decodeResource(getResources(), R.drawable.ring_effect);
                 sprite = new Sprite(GameView.this, bmp);
                 //start loop
                 loop.setRunning(true);
@@ -57,16 +63,23 @@ public class GameView extends SurfaceView {
 
     }
 
-    public void setXY(int x, int y) {
+    public void setXY(int x, int y, int button) {
         //sets x and y values with range (-512, 512)
         this.xValue = (x - 512);
         this.yValue = (y - 512);
+        if (button == 0) {
+            //fancy math to draw effect sprite on top of character sprite: x = sprite_position + 1/2_sprite_width + added_value, & vice versa
+            eSprites.add(new EffectSprite(eSprites, this, sprite.getX() + (bmp.getWidth()/8) + xValue/25, sprite.getY() + (bmp.getHeight()/8) + yValue/25, eBmp));
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(Color.BLACK);
+        for (int i = eSprites.size()-1; i >= 0; i--) {
+            eSprites.get(i).onDraw(canvas);
+        }
         sprite.onDraw(canvas, xValue, yValue);
     }
 

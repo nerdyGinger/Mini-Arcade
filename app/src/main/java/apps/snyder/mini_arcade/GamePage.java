@@ -4,28 +4,13 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.widget.Toast;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
 import java.util.UUID;
 
 /*
@@ -92,7 +77,7 @@ public class GamePage extends AppCompatActivity {
                                     xValue = Integer.parseInt(values[0]);
                                     yValue = Integer.parseInt(values[1]);
                                     buttonValue = Integer.parseInt(values[2]);
-                                    gameView.setXY(xValue, yValue);
+                                    gameView.setXY(xValue, yValue, buttonValue);
 
                                 } else {
                                     readBuffer[readBufferPosition++] = b;

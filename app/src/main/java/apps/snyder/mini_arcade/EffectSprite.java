@@ -21,20 +21,18 @@ public class EffectSprite {
     private List<EffectSprite> sprites;
 
     public EffectSprite(List<EffectSprite> effects, GameView view, float x, float y, Bitmap bmp) {
-        this.x = (int) Math.min(Math.max(x - bmp.getWidth() / 2, 0),
-                view.getWidth() - bmp.getWidth());
-        this.y = (int) Math.min(Math.max(y - bmp.getHeight() / 2, 0),
-                view.getHeight() - bmp.getHeight());
         this.bmp = bmp;
         this.width = bmp.getWidth() / bmpColumns;
         this.height = bmp.getHeight() / bmpRows;
+        this.x = (int) x - width / 2;
+        this.y = (int) y - height / 2;
         this.sprites = effects;
     }
 
     public void onDraw(Canvas canvas) {
         update();
         int srcX = currentFrame * width;
-        int srcY = 4 - life;
+        int srcY = (4 - life) * height;
         src.set(srcX, srcY, srcX + width, srcY + height);
         dst.set(x, y, x + width, y + height);
         canvas.drawBitmap(bmp, src, dst, null);

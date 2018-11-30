@@ -1,17 +1,16 @@
 package apps.snyder.mini_arcade;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.view.Display;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Original code from genius who wrote this tutorial: http://www.edu4java.com/en/androidgame/androidgame4.html
 Retrofitted for my own personal purposes.
-Edited On: 11/28/2018
+Edited On: 11/30/2018
 
-Art credits: (sprites) OpenGameArt.org Author: Antifarea
  */
 
 public class Sprite {
@@ -30,6 +29,7 @@ public class Sprite {
     private int width;
     private Rect src = new Rect();
     private Rect dst = new Rect();
+    private List<EffectSprite> eSprites = new ArrayList<>();
 
     public Sprite(GameView gameView, Bitmap bm) {
         this.x = gameView.getWidth() / 3;  //sets coordinates to center
@@ -38,6 +38,14 @@ public class Sprite {
         this.gameView = gameView;
         this.width = bmp.getWidth() / bmpColumns;
         this.height = bmp.getHeight() / bmpRows;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 
     private void update() {
