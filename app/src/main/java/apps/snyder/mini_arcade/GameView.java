@@ -14,7 +14,12 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.List;
 
-//---> Class for sprite drawing and real-time game animation
+/*
+Custom view class for handling game loop and user input. Thanks for idea and smarts from the author
+of this tutorial: http://www.edu4java.com/en/androidgame/androidgame4.html
+Updated on: 12/3/18
+ */
+
 public class GameView extends SurfaceView {
     private Bitmap bmp;
     private Bitmap eBmp;
@@ -26,6 +31,7 @@ public class GameView extends SurfaceView {
     private List<EffectSprite> eSprites = new ArrayList<>();
 
     public GameView(Context context) {
+        //public constructor, starts GameLoopThread and draws initial character sprite
         super(context);
         loop = new GameLoopThread(GameView.this);
         holder = getHolder();
@@ -75,6 +81,7 @@ public class GameView extends SurfaceView {
 
     @Override
     public void draw(Canvas canvas) {
+        //draws to canvas updated sprite and effect sprite(s) if applicable
         super.draw(canvas);
         canvas.drawColor(Color.BLACK);
         for (int i = eSprites.size()-1; i >= 0; i--) {
@@ -84,22 +91,28 @@ public class GameView extends SurfaceView {
     }
 
 
-
+    /*
+    Inner class defines game loop thread (sounds like a catchy name!) for synchronized animation/event handling
+    Updated on: 12/3/18
+     */
     public class GameLoopThread extends Thread {
         static final long fps = 5;
         private GameView view;
         private boolean running = false;
 
         public GameLoopThread(GameView view) {
+            //public constructor
             this.view = view;
         }
 
         public void setRunning(boolean run) {
+            //is the supposed to be running?
             running = run;
         }
 
         @Override
         public void run() {
+            //actual loop actions; calculates frames per sec for sprite drawing/loop synchronization
             long ticksPS = 1000 / fps;
             long startTime;
             long sleepTime;

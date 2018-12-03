@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-Original code from genius who wrote this tutorial: http://www.edu4java.com/en/androidgame/androidgame4.html
+Original idea from this great tutorial: http://www.edu4java.com/en/androidgame/androidgame4.html
 Retrofitted for my own personal purposes.
-Edited On: 11/30/2018
-
+Edited On: 12/3/18
  */
 
 public class Sprite {
-    //maps direction to animation: 0 up/back, 1 right, 2 down/front, 3 left
+    //creates sprite and handles animation according to input
     private static final int[] animationMap = {0, 2, 1, 3};
+    // ^^^maps direction to animation: 0 up/back, 1 right, 2 down/front, 3 left
     private static final int bmpRows = 4;
     private static final int bmpColumns = 4;
     private int x;
@@ -32,6 +32,7 @@ public class Sprite {
     private List<EffectSprite> eSprites = new ArrayList<>();
 
     public Sprite(GameView gameView, Bitmap bm) {
+        //public constructor
         this.x = gameView.getWidth() / 3;  //sets coordinates to center
         this.y = gameView.getHeight() / 3;
         this.bmp = bm;
@@ -40,6 +41,7 @@ public class Sprite {
         this.height = bmp.getHeight() / bmpRows;
     }
 
+    //getter methods, useful for sending coordinates to EffectSprite class
     public int getX() {
         return this.x;
     }
@@ -49,6 +51,7 @@ public class Sprite {
     }
 
     private void update() {
+        //private method to update frame and next screen position
         if (!(x >= gameView.getWidth() - width - (xSpeed/25)) && !(x + (xSpeed/25) <= 0)) {
             x = x + (xSpeed / 25);
         }
@@ -59,6 +62,7 @@ public class Sprite {
     }
 
     public void onDraw(Canvas canvas, int xValue, int yValue) {
+        //public method to redraw sprite according to screen position offset by passed in joystick x/y values
         this.xSpeed = xValue;
         this.ySpeed = yValue;
         update();
@@ -70,6 +74,7 @@ public class Sprite {
     }
 
     public void onDraw(Canvas canvas) {
+        //public method to redraw sprite without passed in values
         update();
         int srcX = currentFrame * width;
         int srcY = getAnimationRow() * height;
@@ -79,6 +84,7 @@ public class Sprite {
     }
 
     private int getAnimationRow() {
+        //determines direction of sprite and returns appropriate bitmap row
         double dirDouble = (Math.atan2(xSpeed, ySpeed) / (Math.PI / 2) + 2);
         int direction = (int) Math.round(dirDouble) % bmpRows;
         //buffer for non-motion

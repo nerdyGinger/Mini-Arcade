@@ -17,6 +17,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Set;
 
+/*
+MainMenu is the main menu activity... It handles the initialization of bluetooth and selection
+of bluetooth devices.
+Updated on: 12/3/18
+ */
+
 public class MainMenu extends AppCompatActivity {
     private ListView deviceList;
     ArrayList<String> foundDevices = new ArrayList<>();
@@ -30,11 +36,13 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void testSprite(View view) {
+        //onClick for "Test Sprite" button; sends to SpriteTest activity
         Intent test = new Intent(MainMenu.this, SpriteTest.class);
         startActivity(test);
     }
 
     public void connect(View view) {
+        //onClick for "Connect" button; initializes bluetooth and selection list
         BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if (bluetooth == null) {
@@ -67,6 +75,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void showDevices(Set<BluetoothDevice> devices){
+        //populates list of paired devices, manages click event of list
         //add paired devices first
         ArrayList<String> list = new ArrayList<>();
         for(BluetoothDevice b : devices) {
@@ -79,6 +88,7 @@ public class MainMenu extends AppCompatActivity {
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //onClick for device list, sends to GamePage with selected bluetooth device address
                 String info = ((TextView) view).getText().toString();
                 String address = info.substring(info.length()-17);
 
@@ -90,7 +100,9 @@ public class MainMenu extends AppCompatActivity {
         });
     }
 
+    //___vvv____UNDER CONSTRUCTION____vvv____
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        //eventually should allow discovery of nearby devices, but this isn't working yet...
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -101,4 +113,5 @@ public class MainMenu extends AppCompatActivity {
             }
         }
     };
+    //___^^^___UNDER CONSTRUCTION___^^^___
 }

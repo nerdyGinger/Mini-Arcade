@@ -4,6 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+/*
+This activity creates a sprite and walks it around in a little box, testing the gameView and Sprite
+classes and the joystick/button functions.
+Updated on: 12/3/18
+ */
+
 public class SpriteTest extends AppCompatActivity {
     private int xValue = 1000;
     private int yValue = 500;
@@ -24,18 +30,18 @@ public class SpriteTest extends AppCompatActivity {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                    //go down
+                        //go down
                         xValue = 500;
                         yValue = 1000;
                         gameView.setXY(xValue, yValue, button);
                         Thread.sleep(2000);
-                        //go left
+                        //go left, press button
                         button = 0;
                         xValue = 0;
                         yValue = 500;
                         gameView.setXY(xValue, yValue, button);
                         Thread.sleep(2000);
-                        //go up
+                        //go up, un-press button
                         button = 1;
                         xValue = 500;
                         yValue = 0;

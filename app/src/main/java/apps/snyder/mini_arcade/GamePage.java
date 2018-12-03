@@ -14,9 +14,8 @@ import java.io.InputStream;
 import java.util.UUID;
 
 /*
-GameThread and GameView code from genius who wrote this tutorial: http://www.edu4java.com/en/androidgame/androidgame4.html
-Retrofitted for my own personal purposes.
-Edited On: 11/26/2018
+This activity is the actual game; handles data from bluetooth and passes to GameView for sprite animation.
+Updated On: 12/3/18
 */
 
 public class GamePage extends AppCompatActivity {
@@ -33,11 +32,11 @@ public class GamePage extends AppCompatActivity {
     Integer yValue = 503;
     Integer buttonValue;
     private GameView gameView;
-    //static final UUID myUuid = UUID.fromString("ce1cd918-e6ed-11e8-9f32-f2801f1b9fd1"); //generated uuid
     private static final UUID myUuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //base uuid
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //sets GameView, gets bluetooth address from MainMenu activity, starts bluetooth connection
         super.onCreate(savedInstanceState);
         gameView = new GameView(this);
         setContentView(gameView);
@@ -49,8 +48,8 @@ public class GamePage extends AppCompatActivity {
     }
 
 
-    //listener for bluetooth data
     void dataListener() {
+        //listener for bluetooth data
         final byte delimiter = 10;
         stop = false;
         readBufferPosition = 0;
@@ -67,6 +66,7 @@ public class GamePage extends AppCompatActivity {
                             for(int i=0; i<bytes; i++) {
                                 byte b = packet[i];
                                 if (b == delimiter) {
+                                    //at end of data line, decode data
                                     byte[] encodedBytes = new byte[readBufferPosition];
                                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
                                     final String data = new String(encodedBytes, "US-ASCII");
@@ -97,28 +97,30 @@ public class GamePage extends AppCompatActivity {
 
     //Bluetooth connection class
     private class Connect extends AsyncTask<Void, Void, Void> {
+        //begins bluetooth connection; displays progress dialog during connection process
         private boolean connectSuccess = true;
 
         @Override
         protected void onPreExecute() {
+            //bring up progress dialog
             progress = ProgressDialog.show(GamePage.this, "Connecting...", "Please wait...");
         }
 
         @Override
         protected Void doInBackground(Void... devices) {
+            //actually do the connecting
             try {
                 if (btSocket == null || !connection) {
+                    //initial try for connection
                     bt = BluetoothAdapter.getDefaultAdapter();
                     arduino = bt.getRemoteDevice(address);
-                    //btSocket = arduino.createRfcommSocketToServiceRecord(UUID.fromString(arduino.getUuids()[0].toString()));
                     btSocket = arduino.createInsecureRfcommSocketToServiceRecord(myUuid);
-                    //btSocket = arduino.createRfcommSocketToServiceRecord(myUuid);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();
                     mInputStream = btSocket.getInputStream();
                 }
             } catch (Exception ex){
-                //try fallback connection
+                //try fallback connection (not as good, but might work)
                 Log.e("-----Important!----->", "Trying fallback: " + ex.toString());
                 try {
                     btSocket = (BluetoothSocket) arduino.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(arduino,1);
@@ -141,11 +143,13 @@ public class GamePage extends AppCompatActivity {
                 Toast.makeText(GamePage.this, "Connection failed.", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
+                //connection is successful! Begin listening for data for game
                 Toast.makeText(GamePage.this, "Connected", Toast.LENGTH_SHORT).show();
                 connection = true;
 
                 dataListener();
             }
+            //...and get rid of that progress dialog now
             progress.dismiss();
         }
     }
