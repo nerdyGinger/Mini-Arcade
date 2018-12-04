@@ -35,6 +35,12 @@ public class MainMenu extends AppCompatActivity {
         deviceList = findViewById(R.id.deviceList);
     }
 
+    public void aboutPage(View view) {
+        //onClick for "About App" button; sends to AboutPage activity
+        Intent about = new Intent(MainMenu.this, AboutPage.class);
+        startActivity(about);
+    }
+
     public void testSprite(View view) {
         //onClick for "Test Sprite" button; sends to SpriteTest activity
         Intent test = new Intent(MainMenu.this, SpriteTest.class);

@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Mini-Arcade</string>
     <string name="connectButton">Connect</string>
-    <string name="mainMenuText">Welcome to Mini-Arcade!</string>
+    <string name="mainMenuText">Welcome to Mini-Arcade</string>
     <string name="spriteTestText">Test Sprite</string>
+    <string name="instructionsText">Press the Connect button to turn on Bluetooth, then find the Arduino board in the list below. Make sure the Arduino is powered on and paired with your device!</string>
+    <string name="creditsButton">About App</string>
+    <string name="aboutTitle">About App</string>
+    <string name="creditsText">The source code for this app can be found on github.com/nerdyGinger/Mini-Arcade. This app is written by Morgan Snyder, with help from the online community of Android developers.\n\n
+    Thanks to:\n\nhttp://www.edu4java.com/en/androidgame/androidgame1.html (awesome tutorial)\n\nStackOverflow.com\n\nUniversity of Sioux Falls Computer Science Department :)\n\nPiskel</string>
 </resources>
