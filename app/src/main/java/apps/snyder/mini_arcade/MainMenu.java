@@ -20,7 +20,7 @@ import java.util.Set;
 /*
 MainMenu is the main menu activity... It handles the initialization of bluetooth and selection
 of bluetooth devices.
-Updated on: 12/3/18
+Updated on: 12/4/18
  */
 
 public class MainMenu extends AppCompatActivity {
