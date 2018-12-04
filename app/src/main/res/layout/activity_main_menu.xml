@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:padding="10dp"
         android:text="@string/mainMenuText"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@android:color/background_light"
@@ -28,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/mainText"
+        android:layout_below="@+id/instructions"
+        android:layout_margin="5dp"
         android:text="@string/connectButton"
         android:onClick="connect"/>
 
@@ -36,9 +36,30 @@
         android:id="@+id/spriteTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mainText"
+        android:layout_below="@+id/instructions"
+        android:layout_margin="5dp"
         android:text="@string/spriteTestText"
         android:onClick="testSprite"/>
+
+    <Button
+        android:id="@+id/creditsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructions"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:text="@string/creditsButton"
+        android:onClick="aboutPage"/>
+
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mainText"
+        android:text="@string/instructionsText"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:padding="5dp"/>
 
     <ListView
         android:id="@+id/deviceList"
